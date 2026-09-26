@@ -5,7 +5,8 @@ from aiogram.filters import Command
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from aiohttp import web
 
-BOT_TOKEN = "ТВОЙ_ТОКЕН"  # Лучше брать из переменной окружения, но для теста можно так
+import os
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 dp = Dispatcher()
 

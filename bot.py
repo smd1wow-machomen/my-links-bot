@@ -1,11 +1,11 @@
 import asyncio
 import logging
+import os
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from aiohttp import web
 
-import os
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 dp = Dispatcher()
@@ -14,13 +14,17 @@ dp = Dispatcher()
 async def cmd_start(message: Message):
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="📢 Telegram", url="https://t.me/твой_канал")],
-            [InlineKeyboardButton(text="▶️ YouTube", url="https://youtube.com/@твой_канал")],
+            [InlineKeyboardButton(text="📢 Telegram", url="https://t.me/mikha360blog")],
+            [InlineKeyboardButton(text="▶️ YouTube", url="https://youtube.com/@Mikha_Anti")],
+            [InlineKeyboardButton(text="💬 Мой MAX-канал", url="https://max.ru/join/CV1IFpryHpITGUpYIZUGIfEytnAcKp-vt7DDsN4Flok/")],
+            [InlineKeyboardButton(text="💻 GitHub", url="https://github.com//smd1wow-machomen")],
         ]
     )
-    await message.answer("Выбирай:", reply_markup=keyboard)
+    await message.answer(
+        "👋 Привет! Выбирай, куда перейти:",
+        reply_markup=keyboard
+    )
 
-# --- Мини-сервер для Render, чтобы он не усыплял бота ---
 async def handle(request):
     return web.Response(text="Bot is alive!")
 
@@ -29,11 +33,11 @@ async def start_web_server():
     app.router.add_get("/", handle)
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", 10000)  # Render сам подставит порт
+    port = int(os.getenv("PORT", 10000))
+    site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
 
 async def main():
-    # Запускаем веб-сервер и бота одновременно
     await start_web_server()
     bot = Bot(token=BOT_TOKEN)
     await dp.start_polling(bot)
